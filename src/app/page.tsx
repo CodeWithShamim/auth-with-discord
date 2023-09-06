@@ -13,8 +13,11 @@ export default function Home() {
   return (
     <SessionProvider>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <p>Email: {data?.user?.email}</p>
-        {data?.user?.email ? (
+        <div className="text-center">
+          <p>{data && `Name:- ${data?.user?.name}`}</p>
+          <p>{data && `Email:- ${data?.user?.email}`}</p>
+        </div>
+        {data ? (
           <button
             onClick={() => signOut()}
             className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-indigo-600 hover:to-purple-500 text-white font-semibold py-2 px-4 rounded-full inline-flex items-center"
