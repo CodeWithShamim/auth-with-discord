@@ -12,13 +12,18 @@ export default function HandleLogin({ session }: any) {
   }, [session]);
 
   const handleTest = async () => {
-    const data = await axios.post(
-      "https://auth-with-discord-backend.vercel.app/api/v1/discord/grant-role",
-      { userId: session.userId }
-    );
+    try {
+      const data = await axios.post(
+        " https://auth-with-discord-backend-codewithshamim.vercel.app/api/v1/discord/grant-role",
+        { userId: session.userId, roleId: process.env.NEXT_PUBLIC_ROLE_ID }
+      );
 
-    window.alert(`Your role is:- ${data.data.data[0]}`);
-    console.log({ data: data.data.data[0] });
+      console.log({ data: data.data });
+      window.alert(data.data.message);
+    } catch (error: any) {
+      console.log({ error: error?.response });
+      window.alert(error?.response?.data?.message || "Something went wrong");
+    }
   };
 
   return (
