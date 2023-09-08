@@ -1,78 +1,22 @@
-"use client";
+import { authOptions } from "@/utils/authOptions";
+import { getServerSession } from "next-auth";
+import SessionProvider2 from "@/components/SessionProvider";
+import HandleLogin from "@/components/HandleLogin";
 
-import { signIn, useSession, signOut } from "next-auth/react";
-import { SessionProvider } from "next-auth/react";
-
-export default function Home() {
-  const { data } = useSession();
-
-  const handleDiscordLogin = () => {
-    signIn("discord");
-  };
+export default async function Home() {
+  // const session = useSession();
+  const session = await getServerSession(authOptions);
 
   return (
-    <SessionProvider>
+    <SessionProvider2>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="text-center">
-          <p>{data && `Name:- ${data?.user?.name}`}</p>
-          <p>{data && `Email:- ${data?.user?.email}`}</p>
+          <p>{session && `Name:- ${session?.user?.name}`}</p>
+          <p>{session && `Email:- ${session?.user?.email}`}</p>
         </div>
-        {data ? (
-          <button
-            onClick={() => signOut()}
-            className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-indigo-600 hover:to-purple-500 text-white font-semibold py-2 px-4 rounded-full inline-flex items-center"
-          >
-            <svg
-              className="w-6 h-6 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3zm14-4a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v10z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-            Sign Out
-          </button>
-        ) : (
-          <button
-            onClick={handleDiscordLogin}
-            className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-indigo-600 hover:to-purple-500 text-white font-semibold py-2 px-4 rounded-full inline-flex items-center"
-          >
-            <svg
-              className="w-6 h-6 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3zm14-4a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v10z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-            Login with Discord
-          </button>
-        )}
+
+        <HandleLogin session={session} />
       </main>
-    </SessionProvider>
+    </SessionProvider2>
   );
 }
